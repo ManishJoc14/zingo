@@ -1,0 +1,126 @@
+@use "../../styles/mixins" as *;
+@use "../../styles/variables" as *;
+
+.container {
+  @include flex(flex-start, center, row, null);
+  padding: 5rem;
+
+  @include sm {
+    padding: 2rem;
+
+  }
+
+  margin: 150px auto 50px;
+  max-width: 120rem;
+
+  @include lg {
+    flex-direction: column;
+    margin: 10rem 1.5rem;
+    gap: 5rem;
+  }
+
+  .right {
+    width: 50%;
+    @include flex(flex-start, flex-end, row, 50px);
+
+    @include lg {
+      width: 100%;
+      margin-top: 100px;
+    }
+
+    .banner {
+      padding: 2rem;
+      box-shadow: 0 0 3px #ccc;
+      border-radius: 4px;
+      max-width: 50rem;
+      height: auto;
+
+      @include lg {
+        max-width: 100%;
+      }
+    }
+  }
+
+  .left {
+    width: 50%;
+    text-align: center;
+    position: relative;
+
+    @include lg {
+      width: 100%;
+    }
+
+    h1 {
+      @include font(inherit, $font-4xl, lighter);
+
+      &::first-letter {
+        font-size: 7rem;
+      }
+
+      @include md {
+        font-size: 4rem;
+
+        &::first-letter {
+          font-size: 5rem;
+        }
+      }
+
+      text-align: left;
+      margin-bottom: 10px;
+      text-transform: capitalize;
+      color: $dark;
+
+      span {
+        font-weight: $weight-bold;
+      }
+
+    }
+
+    .description {
+      p {
+        text-align: left;
+        font-size: $font-lg;
+        color: $grey-600;
+        line-height: 1.5em;
+        @include md{
+          fone-size: $font-sm;
+        }
+      }
+    }
+
+    .btn {
+      .talkBtn {
+        @include flex(center, center, null, null);
+        @include font(inherit, $font-base, $weight-semibold);
+        position: absolute;
+        margin-top: 50px;
+        padding: 3rem;
+        @include md{
+          padding: 2.5rem;
+        }
+        text-decoration: none;
+        color: $light;
+        background-color: $secondary-light;
+        border-radius: $border-sm;
+        transition: background-color 0.3s ease;
+        border: none;
+        cursor: pointer;
+        z-index: 10;
+
+        &:hover {
+          background-color: $primary-light;
+          outline: none;
+        }
+
+        .icon {
+          font-size: $font-xl;
+          margin-right: 5px;
+        }
+
+        .btnText {
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}

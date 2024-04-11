@@ -1,0 +1,68 @@
+@use "../../styles/mixins" as *;
+@use "../../styles/variables" as *;
+
+:root {
+  --c_01: #f9496b;
+  --c_02: #1dcbad;
+}
+
+.inbutton {
+  min-height: 100% !important;
+  width: 100% !important;
+}
+
+.main {
+  min-height: calc(100vh - 120px); //height of footer = 120px 
+  width: 100vw;
+  display: grid;
+  place-content: center; //to make loader center
+}
+
+
+.wrapper {
+  display: grid;
+  place-content: center;
+  width: 90px;
+  height: 90px;
+  background-image: url('../../assets/logo.png');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  .loader {
+    padding: 5rem;
+    @include sm{
+      padding: 6rem;
+    }
+    height: 100%;
+    width: 100%;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid var(--c_02);
+    border-bottom: 16px solid var(--c_01);
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+
+}
+
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

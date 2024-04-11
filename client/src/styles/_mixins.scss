@@ -1,0 +1,63 @@
+@mixin flex($alignItem, $justifyContent, $direction, $gap) {
+  display: flex;
+  align-items: $alignItem;
+  justify-content: $justifyContent;
+  flex-direction: $direction;
+  gap: $gap;
+}
+
+@mixin position(
+  $position,
+  $top,
+  $bottom,
+  $left,
+  $right,
+  $translateX,
+  $translateY
+) {
+  position: $position;
+  top: $top;
+  bottom: $bottom;
+  left: $left;
+  right: $right;
+  transform: translate($translateX, $translateY);
+}
+
+@mixin font($family, $size, $weight) {
+  font-family: $family;
+  font-size: $size;
+  font-weight: $weight;
+}
+
+
+
+// Mixins for media query
+@mixin xs{
+  @media (max-width: 390px) {
+    @content;
+  }
+}
+
+@mixin sm{
+  @media (max-width: 500px) {
+    @content;
+  }
+}
+
+@mixin md{
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin lg{
+  @media (max-width: 1080px) {
+    @content;
+  }
+}
+
+@mixin xl{
+  @media (min-width: 1080px) {
+    @content;
+  }
+}

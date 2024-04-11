@@ -1,0 +1,30 @@
+@import './variables';
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: $primary-font;
+}
+
+html,
+body {
+  font-size: 62.5%;
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: clip;
+}
+
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 55%;
+  }
+}
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 42%;
+  }
+}
+
+
