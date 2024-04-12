@@ -11,8 +11,7 @@ import {
   setIsOtherJoined,
 } from "../../redux/userSlice";
 
-export const handleEndChat = (e, dispatch, socket) => {
-  e.preventDefault();
+export const handleEndChat = ( dispatch, socket) => {
   socket.disconnect();
   socket.connect();
   dispatch(setRoomId(null));

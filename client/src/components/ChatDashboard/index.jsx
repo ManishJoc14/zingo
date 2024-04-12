@@ -55,7 +55,7 @@ const ChatDashboard = () => {
       <section className={styles.msger}>
         <header className={styles["msger-header"]}>
           <div className={styles.logo}>
-            <Link to="/">
+            <Link to="/" onClick={() => handleEndChat( dispatch, socket)}>
               <img src={logo} alt="userIcon" className={styles.siteLogo} />
             </Link>
           </div>
