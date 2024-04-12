@@ -1,28 +1,20 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import styles from "./ChatDashboard.module.scss";
 import { Link } from "react-router-dom";
 import userIcon from "../../assets/male.png";
 import logo from "../../assets/brand.png";
 import formatTimestamp from "../../utils/functions/timestamp";
-import io from "socket.io-client";
-import {
-  setSearchStatus,
-  setLoadingStatus,
-  setName,
-  setId,
-  setRoomId,
-  setMessages,
-  resetMessages,
-  setDisconnectingStatus,
-  setIsOtherJoined,
-  setOnlineUsersIds,
-} from "../../redux/userSlice";
 import { decodeName } from "../../utils/functions/NameManipulator";
-
+import { handleEndChat } from "../../utils/functions/EndChatUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../context/SocketContext";
-// const socket = io("http://localhost:3001");
+import { handleFindNext } from "../../utils/functions/SearchUtils";
+import { useChattingSocketEvents } from "../../utils/functions/SocketEvents";
+import {
+  handleKeyDown,
+  handleSendEmogi,
+} from "../../utils/functions/SendMessageUtils";
 
 const ChatDashboard = () => {
   const dispatch = useDispatch();
@@ -40,7 +32,7 @@ const ChatDashboard = () => {
     isSearching,
     isOtherJoined,
     onlineUsersNames,
-    onlineUsersIds,
+    // onlineUsersIds,
   } = useSelector((state) => state.userState);
 
   const [msg, setMsg] = useState("");
@@ -52,94 +44,10 @@ const ChatDashboard = () => {
   const anotherUserName = () => {
     return onlineUsersNames.filter((userName) => userName !== name);
   };
+  useChattingSocketEvents(socket, dispatch, roomId);
 
   const handleMsgChange = (e) => {
     setMsg(e.target.value);
-  };
-
-  const handleSend = (e) => {
-    e.preventDefault();
-    socket.emit("send_message", {
-      senderName: name,
-      senderId: id,
-      message: msg,
-      roomId,
-      timestamp: new Date(),
-    });
-    setMsg("");
-  };
-
-  useEffect(() => {
-    socket.on("user_left", ({ userName, userId }) => {
-      socket.emit("send_message", {
-        senderName: userName,
-        senderId: userId,
-        message: "Sorry, I have to leave the chat.",
-        roomId,
-        timestamp: new Date(),
-      });
-      dispatch(setIsOtherJoined(false));
-    });
-
-    socket.on(
-      "receive_message",
-      ({ senderName, senderId, message, timestamp }) => {
-        console.log("message received: ", senderName, message, timestamp);
-        dispatch(setMessages({ senderName, senderId, message, timestamp }));
-      }
-    );
-
-    return () => {
-      socket.off("receive_message");
-      socket.off("user_left");
-    };
-  }, [roomId, socket, dispatch]);
-
-  const handleKeyDown = (e) => {
-    if (e && e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      setMsg("");
-      handleSend(e);
-    }
-  };
-
-  const handleSendEmogi = (e) => {
-    e.preventDefault();
-    socket.emit("send_message", {
-      senderName: name,
-      senderId: id,
-      message: "❤️",
-      roomId,
-      timestamp: new Date(),
-    });
-  };
-
-  const handleEndChat = (e) => {
-    socket.disconnect();
-    socket.connect();
-    e.preventDefault();
-    dispatch(setRoomId(null));
-    dispatch(setLoadingStatus(false));
-    dispatch(setDisconnectingStatus(true));
-    dispatch(setIsOtherJoined(false));
-    dispatch(setSearchStatus(false));
-  };
-
-  const handleFindNext = () => {
-    socket.disconnect();
-    socket.connect();
-
-    const usersData = JSON.parse(localStorage.getItem("userData"));
-    if (usersData) {
-      dispatch(setName(usersData?.nickName));
-    }
-    dispatch(setId(null));
-    dispatch(setSearchStatus(true));
-    dispatch(setLoadingStatus(true));
-    dispatch(setDisconnectingStatus(false));
-    dispatch(setIsOtherJoined(false));
-    dispatch(resetMessages());
-    socket.emit("join_room", { userName: name });
   };
 
   return (
@@ -157,13 +65,16 @@ const ChatDashboard = () => {
           </div>
           <div className={styles.navs}>
             {!isSearching ? (
-              <button className={styles.btn} onClick={handleFindNext}>
+              <button
+                className={styles.btn}
+                onClick={() => handleFindNext(dispatch, socket, name)}
+              >
                 Find Next
               </button>
             ) : (
               <button
                 className={`${styles.btn} ${styles.endBtn}`}
-                onClick={handleEndChat}
+                onClick={(e) => handleEndChat(e, dispatch, socket)}
               >
                 Stop
               </button>
@@ -211,9 +122,14 @@ const ChatDashboard = () => {
               placeholder="Type your message..."
               value={msg}
               onChange={handleMsgChange}
-              onKeyDown={handleKeyDown}
+              onKeyDown={(e) =>
+                handleKeyDown(e, socket, name, id, msg, roomId, setMsg)
+              }
             />
-            <FaHeart className={styles.heart} onClick={handleSendEmogi} />
+            <FaHeart
+              className={styles.heart}
+              onClick={(e) => handleSendEmogi(e, socket, name, id, roomId)}
+            />
           </form>
         ) : isSearching ? null : (
           <div className={styles.disconnected}>
