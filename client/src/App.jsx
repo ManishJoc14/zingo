@@ -3,21 +3,26 @@ import Layout from "./components/Layout";
 import AppRoutes from "./routes/PublicRoutes";
 import useOverflowEffect from "./utils/functions/useOverflowEffect";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setName } from "./redux/userSlice";
 
 const App = () => {
   useOverflowEffect(); //to manage overflowing issue
   const navigate = useNavigate();
-
-  const hasUserData = localStorage.getItem("userData");
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    const usersData = JSON.parse(localStorage.getItem("userData"));
+    if (usersData) {
+      dispatch(setName(usersData?.nickName));
+    }
     const path = window.location.pathname;
-    if (path === "/starter" && hasUserData) {
+    if (path === "/starter" && usersData) {
       navigate("/start-searching");
-    } else if (path === "/start-searching" && !hasUserData) {
+    } else if (path === "/start-searching" && !usersData) {
       navigate("/starter");
     }
-  }, [hasUserData, navigate]);
+  }, [dispatch, navigate]);
 
   return (
     <Layout>

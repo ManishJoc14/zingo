@@ -4,6 +4,7 @@ import styles from "./Starter.module.scss";
 import male from "../../assets/male.png";
 import female from "../../assets/female.png";
 import { useNavigate } from "react-router-dom";
+import { encodeName } from "../../utils/functions/NameManipulator";
 
 const Starter = () => {
   const [step, setStep] = useState(1);
@@ -26,7 +27,11 @@ const Starter = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("userData", JSON.stringify(usersData));
+    const encoded = encodeName(usersData.nickName);
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ ...usersData, nickName: encoded })
+    );
     navigation("/start-searching");
   };
 

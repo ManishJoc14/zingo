@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
 
     // Join the room
     socket.join(roomId);
-    console.log(`${userName} joined room: ${roomId}`);
+    console.log(`${userName}(${socket.id}) joined room: ${roomId}`);
 
     // Update online users of the room
     if (!onlineUsersOfARoom.has(roomId)) {
@@ -99,18 +99,27 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("send_message", ({ senderName, message, roomId }) => {
-    console.log(
-      `Message received from ${senderName} in room ${roomId}: ${message}`
-    );
-    io.to(roomId).emit("receive_message", { senderName, message });
-  });
+  socket.on(
+    "send_message",
+    ({ senderName, senderId, message, roomId, timestamp }) => {
+      console.log(
+        `Message received from ${senderName}(${senderId}) in room ${roomId} at ${timestamp}: ${message}`
+      );
+      io.to(roomId).emit("receive_message", {
+        senderName,
+        senderId,
+        message,
+        timestamp,
+      });
+    }
+  );
 
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
     // Remove the user from the list of online users and online users of the room
     // Get the user name of the disconnected user
     const userName = onlineUsers.get(socket.id);
+    const userId = socket.id;
 
     onlineUsers.delete(socket.id);
     const roomIds = Array.from(onlineUsersOfARoom.keys());
@@ -123,7 +132,7 @@ io.on("connection", (socket) => {
           userNames: Array.from(usersOfRoom.values()),
         });
         // Emit a user_left event to clients in the same room
-        io.to(roomId).emit("user_left", { userName });
+        io.to(roomId).emit("user_left", { userName, userId });
       }
 
       // If no users left in the room, delete the room ID

@@ -1,8 +1,5 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-// import { starterSelector } from "../components/Starter/redux/selector";
 import Loader from "../components/Loader";
 
 const HomePage = React.lazy(() => import("../components/HomePage"));
@@ -13,26 +10,13 @@ const ChatDashboard = React.lazy(() => import("../components/ChatDashboard"));
 const PageNotFound = React.lazy(() => import("../components/PageNotFound"));
 
 const AppRoutes = () => {
-  // const { roomId } = useSelector(starterSelector);
-  const [roomId, setRoomId] = useState(null);
-  
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    if (path === "/chat-dashboard" && roomId === null) {
-      navigate("/starter");
-    }
-  }, [roomId, navigate]);
-
   return (
     <Routes>
       <Route
         path="/"
         element={
           <Suspense fallback={<Loader />}>
-            {" "}
-            <HomePage />{" "}
+            <HomePage />
           </Suspense>
         }
       />
@@ -40,7 +24,6 @@ const AppRoutes = () => {
         path="/starter"
         element={
           <Suspense fallback={<Loader />}>
-            {" "}
             <Starter />
           </Suspense>
         }
@@ -49,7 +32,6 @@ const AppRoutes = () => {
         path="/contact"
         element={
           <Suspense fallback={<Loader />}>
-            {" "}
             <ContactUs />
           </Suspense>
         }
@@ -58,7 +40,6 @@ const AppRoutes = () => {
         path="/start-searching"
         element={
           <Suspense fallback={<Loader />}>
-            {" "}
             <Searching />
           </Suspense>
         }
@@ -67,7 +48,6 @@ const AppRoutes = () => {
         path="/chat-dashboard"
         element={
           <Suspense fallback={<Loader />}>
-            {" "}
             <ChatDashboard />
           </Suspense>
         }
@@ -76,7 +56,6 @@ const AppRoutes = () => {
         path="*"
         element={
           <Suspense fallback={<Loader />}>
-            {" "}
             <PageNotFound />
           </Suspense>
         }

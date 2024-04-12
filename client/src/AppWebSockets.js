@@ -5,6 +5,7 @@ const socket = io("http://localhost:3001");
 
 function App() {
   const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState("");
   const [roomId, setRoomId] = useState(null);
   const [onlineUsersNames, setOnlineUsersNames] = useState([]);
   const [message, setMessage] = useState("");
@@ -17,8 +18,9 @@ function App() {
       setMessages((prevMessages) => [...prevMessages, { senderName, message }]);
     };
 
-    socket.on("room_joined", ({ roomId }) => {
+    socket.on("room_joined", ({ userId, roomId }) => {
       setRoomId(roomId);
+      setUserId(userId);
     });
 
     socket.on("user_left", ({ userName }) => {
@@ -53,7 +55,13 @@ function App() {
 
   const sendMessage = (e) => {
     e.preventDefault();
-    socket.emit("send_message", { senderName: userName, message, roomId });
+    socket.emit("send_message", {
+      senderName: userName,
+      senderId: userId,
+      message,
+      roomId,
+      timestamp: new Date(),
+    });
     setMessage("");
   };
   const disconnectChat = () => {
