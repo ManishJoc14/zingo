@@ -55,7 +55,7 @@ const ChatDashboard = () => {
       <section className={styles.msger}>
         <header className={styles["msger-header"]}>
           <div className={styles.logo}>
-            <Link to="/" onClick={() => handleEndChat( dispatch, socket)}>
+            <Link to="/" onClick={() => handleEndChat(dispatch, socket)}>
               <img src={logo} alt="userIcon" className={styles.siteLogo} />
             </Link>
           </div>
@@ -74,7 +74,7 @@ const ChatDashboard = () => {
             ) : (
               <button
                 className={`${styles.btn} ${styles.endBtn}`}
-                onClick={(e) => handleEndChat(e, dispatch, socket)}
+                onClick={() => handleEndChat(dispatch, socket)}
               >
                 Stop
               </button>
