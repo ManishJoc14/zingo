@@ -5,7 +5,9 @@ const { initializeSocket } = require("./socket");
 
 // Initialize Express app and server
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+}));
 const server = http.createServer(app);
 
 // Initialize socket.io
