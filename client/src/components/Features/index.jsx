@@ -10,8 +10,10 @@ import lottieAnimation1 from "../../assets/Animation1.json";
 import lottieAnimation2 from "../../assets/Animation2.json";
 import lottieAnimation3 from "../../assets/Animation3.json";
 import lottieAnimation4 from "../../assets/Animation4.json";
+import { useNavigate } from "react-router-dom";
 
 function Features() {
+  const navigate = useNavigate();
   const featuresData = [
     {
       icon: lottieAnimation1,
@@ -46,7 +48,9 @@ function Features() {
       backgroundColor: "rgb(255, 252, 240)",
     },
   ];
-
+  const handleTalkClick = () => {
+    navigate("/start-searching");
+  };
   return (
     <section className={styles.main}>
       <h1>Born from a passion for uniting the world</h1>
@@ -68,6 +72,7 @@ function Features() {
               <h1 className={styles.title}>{feature.title}</h1>
               <p className={styles.description}>{feature.description}</p>
               <div
+                onClick={handleTalkClick}
                 className={styles.talkButton}
                 style={{
                   border: `1.2px solid ${feature.borderColor}`,
