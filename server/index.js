@@ -6,7 +6,7 @@ const { initializeSocket } = require("./socket");
 // Initialize Express app and server
 const app = express();
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://zingo-delta.vercel.app",
 }));
 const server = http.createServer(app);
 
