@@ -5,7 +5,7 @@ import io from "socket.io-client";
 export const SocketContext = createContext();
 
 const SocketProvider = ({ children }) => {
-  const SOCKET_URL = "http://localhost:3001";
+  const SOCKET_URL = "https://zingo-backend.onrender.com";
   const socket = io(SOCKET_URL);
 
   return (
