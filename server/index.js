@@ -8,6 +8,14 @@ const app = express();
 app.use(cors({
   origin: "https://zingo-delta.vercel.app",
 }));
+
+app.get("/", (req, res) => {
+  res.json({
+    developer: "Manish Joshi",
+    message: "Welcome to Zingo backend!",
+  });
+});
+
 const server = http.createServer(app);
 
 // Initialize socket.io
