@@ -5,11 +5,16 @@ const {
   handleDisconnect,
 } = require("./socketHandlers");
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://zingo-delta.vercel.app",
+];
+
 // Function to initialize socket
 const initializeSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: allowedOrigins,
       methods: ["GET", "POST"],
     },
   });
